@@ -10,11 +10,11 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import type { Event } from "@/types";
 import { formatTime } from "@/utils/dateHelpers";
+import type { CalendarEvent } from "@/types";
 
 interface Props {
-  event: Event;
+  event: CalendarEvent;
 }
 
 const props = defineProps<Props>();

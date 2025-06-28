@@ -11,6 +11,7 @@ import {
   isValid,
   isSameDay,
 } from "date-fns";
+import type { CalendarEvent } from "@/types";
 
 export const formatDate = (
   date: Date | string,
@@ -58,7 +59,7 @@ export const generateId = (): string => {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 };
 
-export const sortEventsByTime = (events: Event[]): Event[] => {
+export const sortEventsByTime = (events: CalendarEvent[]): CalendarEvent[] => {
   return [...events].sort((a, b) => {
     if (!a.time && !b.time) return 0;
     if (!a.time) return 1;

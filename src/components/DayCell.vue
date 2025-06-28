@@ -33,10 +33,12 @@
     <!-- Solo símbolos de eventos -->
     <div class="flex flex-wrap gap-1 mt-2">
       <template v-for="event in visibleDots" :key="event.id">
-        <span
-          class="inline-block w-2.5 h-2.5 rounded-full"
-          :style="{ backgroundColor: event.tag?.color || '#3b82f6' }"
-        ></span>
+        <template v-for="event in visibleDots" :key="event.id">
+          <span
+            class="inline-block w-2.5 h-2.5 rounded-full"
+            :style="{ backgroundColor: event.tag?.color || '#3b82f6' }"
+          ></span>
+        </template>
       </template>
       <span
         v-if="hiddenEventCount > 0"
@@ -50,8 +52,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import type { CalendarDay } from "@/types";
 import { sortEventsByTime } from "@/utils/dateHelpers";
+import type { CalendarDay, CalendarEvent } from "@/types";
 
 interface Props {
   day: CalendarDay;
@@ -66,7 +68,9 @@ const emit = defineEmits<{
 const dayNumber = computed(() => props.day.date.getDate());
 const eventCount = computed(() => props.day.events.length);
 
-const sortedEvents = computed(() => sortEventsByTime(props.day.events));
+const sortedEvents = computed(() =>
+  sortEventsByTime(props.day.events as CalendarEvent[])
+);
 const visibleDots = computed(() => sortedEvents.value.slice(0, 3));
 const hiddenEventCount = computed(() => Math.max(0, eventCount.value - 3));
 

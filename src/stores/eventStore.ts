@@ -2,7 +2,7 @@ import { ref, computed } from "vue";
 import { useStorage } from "@vueuse/core";
 import { defineStore } from "pinia";
 import { generateId, isSameDateString } from "@/utils/dateHelpers";
-import type { Event, EventTag, CreateEventData } from "@/types";
+import type { CalendarEvent, EventTag, CreateEventData } from "@/types";
 
 const defaultTags: EventTag[] = [
   { id: "work", name: "Work", color: "bg-blue-500" },
@@ -15,7 +15,7 @@ const defaultTags: EventTag[] = [
 
 export const useEventStore = defineStore("events", () => {
   // Persistent state
-  const events = useStorage<Event[]>("calendar-events", []);
+  const events = useStorage<CalendarEvent[]>("calendar-events", []);
   const tags = useStorage<EventTag[]>("calendar-tags", defaultTags);
 
   // Local reactive state
@@ -23,7 +23,7 @@ export const useEventStore = defineStore("events", () => {
   const selectedDate = ref<Date | null>(null);
   const activeTagFilter = ref<string | null>(null);
   const isEventModalOpen = ref(false);
-  const editingEvent = ref<Event | null>(null);
+  const editingEvent = ref<CalendarEvent | null>(null);
 
   // Computed
   const filteredEvents = computed(() => {
@@ -48,11 +48,11 @@ export const useEventStore = defineStore("events", () => {
   });
 
   // Actions
-  const createEvent = (eventData: CreateEventData): Event => {
+  const createEvent = (eventData: CreateEventData): CalendarEvent => {
     const tag = getTagById.value(eventData.tagId);
     const now = new Date().toISOString();
 
-    const newEvent: Event = {
+    const newEvent: CalendarEvent = {
       id: generateId(),
       title: eventData.title,
       description: eventData.description,
@@ -70,12 +70,12 @@ export const useEventStore = defineStore("events", () => {
   const updateEvent = (
     eventId: string,
     updates: Partial<CreateEventData>
-  ): Event | null => {
+  ): CalendarEvent | null => {
     const eventIndex = events.value.findIndex((e) => e.id === eventId);
     if (eventIndex === -1) return null;
 
     const event = events.value[eventIndex];
-    const updatedEvent: Event = {
+    const updatedEvent: CalendarEvent = {
       ...event,
       ...updates,
       tag: updates.tagId ? getTagById.value(updates.tagId) : event.tag,
@@ -104,7 +104,7 @@ export const useEventStore = defineStore("events", () => {
     activeTagFilter.value = tagId;
   };
 
-  const openEventModal = (event?: Event) => {
+  const openEventModal = (event?: CalendarEvent) => {
     editingEvent.value = event || null;
     isEventModalOpen.value = true;
   };
@@ -130,7 +130,7 @@ export const useEventStore = defineStore("events", () => {
 
   const importEvents = (jsonData: string): boolean => {
     try {
-      const importedEvents = JSON.parse(jsonData) as Event[];
+      const importedEvents = JSON.parse(jsonData) as CalendarEvent[];
       // Validate structure
       if (!Array.isArray(importedEvents)) return false;
 

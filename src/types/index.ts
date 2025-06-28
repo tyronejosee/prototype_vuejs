@@ -1,4 +1,4 @@
-export type Event = {
+export type CalendarEvent = {
   id: string;
   title: string;
   description?: string;
@@ -19,13 +19,13 @@ export type CalendarDay = {
   date: Date;
   isCurrentMonth: boolean;
   isToday: boolean;
-  events: Event[];
+  events: CalendarEvent[];
 };
 
 export type CalendarState = {
   currentDate: Date;
   selectedDate: Date | null;
-  events: Event[];
+  events: CalendarEvent[];
   tags: EventTag[];
   activeTagFilter: string | null;
 };

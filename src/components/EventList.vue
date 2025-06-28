@@ -73,13 +73,13 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { Plus, Calendar } from "lucide-vue-next";
-import type { Event } from "@/types";
+import { Calendar } from "lucide-vue-next";
 import { useEventStore } from "@/stores/eventStore";
 import { sortEventsByTime, formatTime } from "@/utils/dateHelpers";
+import type { CalendarEvent } from "@/types";
 
 interface Props {
-  events: Event[];
+  events: CalendarEvent[];
   title: string;
 }
 
@@ -92,7 +92,7 @@ const handleCreateEvent = () => {
   eventStore.openEventModal();
 };
 
-const handleEditEvent = (event: Event) => {
+const handleEditEvent = (event: CalendarEvent) => {
   eventStore.openEventModal(event);
 };
 </script>
